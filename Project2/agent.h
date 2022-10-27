@@ -133,7 +133,6 @@ public:
 	}
 
 	float calculate_value(const board& after){
-		std::cout << "I'm here!!!!!!!" << std::endl;
 		float value = 0;
 
 		value += net[0][get_feature(after,  0,  1,  2,  3)];
@@ -144,7 +143,7 @@ public:
 		value += net[4][get_feature(after, 0, 4,  8, 12)];
 		value += net[5][get_feature(after, 1, 5,  9, 13)];
 		value += net[6][get_feature(after, 2, 6, 10, 14)];
-		value += net[07][get_feature(after, 3, 7, 11, 15)];
+		value += net[7][get_feature(after, 3, 7, 11, 15)];
 
 		return value;
 	}
@@ -189,11 +188,19 @@ public:
 
 protected:
 	virtual void init_weights(const std::string& info) {
-		std::string res = info; // comma-separated sizes, e.g., "65536,65536"
-		for (char& ch : res)
-			if (!std::isdigit(ch)) ch = ' ';
-		std::stringstream in(res);
-		for (size_t size; in >> size; net.emplace_back(size));
+		// std::string res = info; // comma-separated sizes, e.g., "65536,65536"
+		// for (char& ch : res)
+		// 	if (!std::isdigit(ch)) ch = ' ';
+		// std::stringstream in(res);
+		// for (size_t size; in >> size; net.emplace_back(size));
+		net.emplace_back(pow(25, 4));
+		net.emplace_back(pow(25, 4));
+		net.emplace_back(pow(25, 4));
+		net.emplace_back(pow(25, 4));
+		net.emplace_back(pow(25, 4));
+		net.emplace_back(pow(25, 4));
+		net.emplace_back(pow(25, 4));
+		net.emplace_back(pow(25, 4));
 	}
 	virtual void load_weights(const std::string& path) {
 		std::ifstream in(path, std::ios::in | std::ios::binary);
