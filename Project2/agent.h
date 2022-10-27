@@ -74,13 +74,6 @@ protected:
 class tuple_agent : public agent {
 public:
 
-	struct step{
-		int reward;
-		board after;
-	};
-
-	std::vector<step> record;
-
 	tuple_agent(const std::string& args = "") : agent("name=tuple role=player " + args), alpha(0) {
 		if (meta.find("init") != meta.end())
 			init_weights(meta["init"]);
@@ -185,6 +178,13 @@ public:
 			adjust_value(record[i+1].after, adjust_target);
 		}
 	}
+
+	struct step{
+		int reward;
+		board after;
+	};
+
+	std::vector<step> record;
 
 protected:
 	virtual void init_weights(const std::string& info) {
