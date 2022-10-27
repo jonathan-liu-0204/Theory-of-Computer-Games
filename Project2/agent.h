@@ -216,6 +216,8 @@ protected:
 		net.emplace_back(25 * 25 * 25 * 25);
 		net.emplace_back(25 * 25 * 25 * 25);
 		net.emplace_back(25 * 25 * 25 * 25);
+
+		std::cout << "Initial Net" << std::endl;
 	}
 	virtual void load_weights(const std::string& path) {
 		std::ifstream in(path, std::ios::in | std::ios::binary);
