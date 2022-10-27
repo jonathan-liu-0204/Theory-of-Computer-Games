@@ -160,7 +160,7 @@ private:
  */
 class random_slider : public random_agent {
 public:
-	random_slider(const std::string& args = "") : random_agent("name=baseline role=slider " + args),
+	random_slider(const std::string& args = "") : random_agent("name=slide role=slider " + args),
 		opcode({ 0, 1, 2, 3 }) {}
 
 	virtual action take_action(const board& before) {
@@ -169,46 +169,6 @@ public:
 			board::reward reward = board(before).slide(op);
 			if (reward != -1) return action::slide(op);
 		}
-		return action();
-	}
-
-private:
-	std::array<int, 4> opcode;
-};
-
-class greedy_slider : public random_agent {
-public:
-	greedy_slider(const std::string& args = "") : random_agent("name=greedy role=slider " + args),
-		opcode({ 0, 1, 2, 3 }) {}
-
-	virtual action take_action(const board& before) {
-		//std::shuffle(opcode.begin(), opcode.end(), engine);
-		board::reward max_reward = -1; 
-		int best_op;
-		for (int op : opcode) {
-			board::reward reward = board(before).slide(op);
-			if(op == 0) {
-				reward = 8 * reward + 1;
-			}
-			if(op == 1) {
-				reward = 8 * reward + 1;
-			}
-			if(op == 2) {
-				if(before[3][3] != 0)
-				reward = 2 * reward + 1;
-			}
-			if(op == 3) {
-				if(before[0][0] != 0)
-				reward = 2 * reward + 1;
-			}
-
-			if(reward > max_reward) {
-				max_reward = reward;
-				best_op = op;
-			}
-			
-		}
-		if(max_reward > -1) return action::slide(best_op);
 		return action();
 	}
 
