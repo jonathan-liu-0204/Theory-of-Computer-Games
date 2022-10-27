@@ -94,6 +94,9 @@ public:
 		board best_after;
 
 		for(int op = 0; op <= 3; op++){
+
+			std::cout << "op = " << op << std::endl;
+			
 			board after = before;
 			int reward = after.slide(op);
 
