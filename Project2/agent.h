@@ -119,7 +119,35 @@ public:
 		return action::slide(best_op);
 	}
 
-	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4) const{
+	virtual void open_episode(const std::string& flag = ""){
+		record.clear();
+	}
+
+	virtual void close_episode(const std::string& flag = ""){
+		if(record.empty()){
+			return;
+		}
+
+		if(alpha == 0){
+			return;
+		}
+
+		adjust_value(record[record.size() - 1].after, 0);
+
+		for(int i = record.size() - 2; i >= 0; i--){
+			float adjust_target = record[i+1].reward + calculate_value(record[i+1].after);
+			adjust_value(record[i+1].after, adjust_target);
+		}
+	}
+
+	struct step{
+		int reward;
+		board after;
+	};
+
+	std::vector<step> record;
+
+		int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4) const{
 		int feature = after(vertice1) * 25 * 25 * 25 + after(vertice2) * 25 * 25 + after(vertice3) * 25 + after(vertice4);
 
 		return feature;
@@ -157,34 +185,6 @@ public:
 		net[6][get_feature(after, 2, 6, 10, 14)] += adjust;
 		net[7][get_feature(after, 3, 7, 11, 15)] += adjust;
 	}
-
-	virtual void open_episode(const std::string& flag = ""){
-		record.clear();
-	}
-
-	virtual void close_episode(const std::string& flag = ""){
-		if(record.empty()){
-			return;
-		}
-
-		if(alpha == 0){
-			return;
-		}
-
-		adjust_value(record[record.size() - 1].after, 0);
-
-		for(int i = record.size() - 2; i >= 0; i--){
-			float adjust_target = record[i+1].reward + calculate_value(record[i+1].after);
-			adjust_value(record[i+1].after, adjust_target);
-		}
-	}
-
-	struct step{
-		int reward;
-		board after;
-	};
-
-	std::vector<step> record;
 
 protected:
 	virtual void init_weights(const std::string& info) {
