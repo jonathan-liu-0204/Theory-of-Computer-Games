@@ -135,7 +135,6 @@ public:
 		adjust_value(record[record.size() - 1].after, 0);
 
 		for(int i = record.size() - 2; i >= 0; i--){
-			std::cout << "i = " << i << std::endl;
 			float adjust_target = record[i+1].reward + calculate_value(record[i+1].after);
 			adjust_value(record[i].after, adjust_target);
 		}
@@ -149,7 +148,7 @@ public:
 	std::vector<step> record;
 
 	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4) const{
-		return after(vertice1) * 25 * 25 * 25 + after(vertice2) * 25 * 25 + after(vertice3) * 25 + after(vertice4);
+		return after(vertice1) * 16 * 16 * 16 + after(vertice2) * 16 * 16 + after(vertice3) * 16 + after(vertice4);
 	}
 
 	float calculate_value(const board& after) const{
@@ -187,20 +186,20 @@ public:
 
 protected:
 	virtual void init_weights(const std::string& info) {
-		std::string res = info; // comma-separated sizes, e.g., "65536,65536"
-		for (char& ch : res)
-			if (!std::isdigit(ch)) ch = ' ';
-		std::stringstream in(res);
-		for (size_t size; in >> size; net.emplace_back(size));
+		// std::string res = info; // comma-separated sizes, e.g., "65536,65536"
+		// for (char& ch : res)
+		// 	if (!std::isdigit(ch)) ch = ' ';
+		// std::stringstream in(res);
+		// for (size_t size; in >> size; net.emplace_back(size));
 		// net.emplace_back(65536);
-		// net.emplace_back(25 * 25 * 25 * 25);
-		// net.emplace_back(25 * 25 * 25 * 25);
-		// net.emplace_back(25 * 25 * 25 * 25);
-		// net.emplace_back(25 * 25 * 25 * 25);
-		// net.emplace_back(25 * 25 * 25 * 25);
-		// net.emplace_back(25 * 25 * 25 * 25);
-		// net.emplace_back(25 * 25 * 25 * 25);
-		// net.emplace_back(25 * 25 * 25 * 25);
+		net.emplace_back(16 * 16 * 16 * 16);
+		net.emplace_back(16 * 16 * 16 * 16);
+		net.emplace_back(16 * 16 * 16 * 16);
+		net.emplace_back(16 * 16 * 16 * 16);
+		net.emplace_back(16 * 16 * 16 * 16);
+		net.emplace_back(16 * 16 * 16 * 16);
+		net.emplace_back(16 * 16 * 16 * 16);
+		net.emplace_back(16 * 16 * 16 * 16);
 
 		// std::cout << "Initial Net" << std::endl;
 	}
