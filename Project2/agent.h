@@ -73,7 +73,6 @@ protected:
  */
 class tuple_agent : public agent {
 public:
-
 	tuple_agent(const std::string& args = "") : agent("name=tuple role=player " + args), alpha(0) {
 		if (meta.find("init") != meta.end())
 			init_weights(meta["init"]);
@@ -136,7 +135,7 @@ public:
 
 		for(int i = record.size() - 2; i >= 0; i--){
 			float adjust_target = record[i+1].reward + calculate_value(record[i+1].after);
-			adjust_value(record[i+1].after, adjust_target);
+			adjust_value(record[i].after, adjust_target);
 		}
 	}
 
