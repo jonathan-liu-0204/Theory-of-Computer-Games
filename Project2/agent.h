@@ -153,6 +153,7 @@ public:
 	std::vector<step> record;
 
 	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4) const{
+		std::cout << "I'm in the get_feature()" << std::endl;
 		return after(vertice1) * 25 * 25 * 25 + after(vertice2) * 25 * 25 + after(vertice3) * 25 + after(vertice4);
 	}
 
