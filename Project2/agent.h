@@ -192,14 +192,14 @@ protected:
 		// 	if (!std::isdigit(ch)) ch = ' ';
 		// std::stringstream in(res);
 		// for (size_t size; in >> size; net.emplace_back(size));
-		net.emplace_back(25 * 25 * 25 * 25);
-		net.emplace_back(25 * 25 * 25 * 25);
-		net.emplace_back(25 * 25 * 25 * 25);
-		net.emplace_back(25 * 25 * 25 * 25);
-		net.emplace_back(25 * 25 * 25 * 25);
-		net.emplace_back(25 * 25 * 25 * 25);
-		net.emplace_back(25 * 25 * 25 * 25);
-		net.emplace_back(25 * 25 * 25 * 25);
+		net.emplace_back(65536);
+		net.emplace_back(65536);
+		net.emplace_back(65536);
+		net.emplace_back(65536);
+		net.emplace_back(65536);
+		net.emplace_back(65536);
+		net.emplace_back(65536);
+		net.emplace_back(65536);
 	}
 	virtual void load_weights(const std::string& path) {
 		std::ifstream in(path, std::ios::in | std::ios::binary);
