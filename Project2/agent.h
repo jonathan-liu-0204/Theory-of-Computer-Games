@@ -127,7 +127,7 @@ public:
 	}
 
 	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4){
-		int feature = after(vertice1) * pow(25, 3) + after(vertice2) * pow(25, 2) + after(vertice3) * 25 + after(vertice4);
+		int feature = after(vertice1) * 25 * 25 * 25 + after(vertice2) * 25 * 25 + after(vertice3) * 25 + after(vertice4);
 
 		return feature;
 	}
@@ -193,14 +193,14 @@ protected:
 		// 	if (!std::isdigit(ch)) ch = ' ';
 		// std::stringstream in(res);
 		// for (size_t size; in >> size; net.emplace_back(size));
-		net.emplace_back(pow(25, 4));
-		net.emplace_back(pow(25, 4));
-		net.emplace_back(pow(25, 4));
-		net.emplace_back(pow(25, 4));
-		net.emplace_back(pow(25, 4));
-		net.emplace_back(pow(25, 4));
-		net.emplace_back(pow(25, 4));
-		net.emplace_back(pow(25, 4));
+		net.emplace_back(25 * 25 * 25 * 25);
+		net.emplace_back(25 * 25 * 25 * 25);
+		net.emplace_back(25 * 25 * 25 * 25);
+		net.emplace_back(25 * 25 * 25 * 25);
+		net.emplace_back(25 * 25 * 25 * 25);
+		net.emplace_back(25 * 25 * 25 * 25);
+		net.emplace_back(25 * 25 * 25 * 25);
+		net.emplace_back(25 * 25 * 25 * 25);
 	}
 	virtual void load_weights(const std::string& path) {
 		std::ifstream in(path, std::ios::in | std::ios::binary);
