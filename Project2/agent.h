@@ -154,7 +154,7 @@ public:
 	float calculate_value(const board& after) const{
 		float value = 0;
 
-		value += net[0][get_feature(after, 0, 1, 2, 3)];
+		value += net[0][get_feature(after,  0,  1,  2,  3)];
 		value += net[1][get_feature(after,  4,  5,  6,  7)];
 		value += net[2][get_feature(after,  8,  9, 10, 11)];
 		value += net[3][get_feature(after, 12, 13, 14, 15)];
@@ -171,7 +171,6 @@ public:
 		float current = calculate_value(after);
 		float offset = target - current;
 		float adjust = alpha * offset;
-
 
 		net[0][get_feature(after,  0,  1,  2,  3)] += adjust;
 		net[1][get_feature(after,  4,  5,  6,  7)] += adjust;
