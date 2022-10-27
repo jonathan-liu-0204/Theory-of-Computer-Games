@@ -93,7 +93,7 @@ public:
 
 		board best_after;
 
-		for(int op : {0, 1, 2, 3}){
+		for(int op = 0; op <= 3; op++){
 			board after = before;
 			int reward = after.slide(op);
 
