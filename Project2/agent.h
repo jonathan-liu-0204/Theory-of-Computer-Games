@@ -96,7 +96,7 @@ public:
 		for(int op = 0; op <= 3; op++){
 
 			std::cout << "op = " << op << std::endl;
-			
+
 			board after = before;
 			int reward = after.slide(op);
 
@@ -162,14 +162,22 @@ public:
 		float value = 0;
 
 		value += net[0][get_feature(after,  0,  1,  2,  3)];
+		std::cout << "net[0] okokokokok!" << std::endl;
 		value += net[1][get_feature(after,  4,  5,  6,  7)];
+		std::cout << "net[1] okokokokok!" << std::endl;
 		value += net[2][get_feature(after,  8,  9, 10, 11)];
+		std::cout << "net[2] okokokokok!" << std::endl;
 		value += net[3][get_feature(after, 12, 13, 14, 15)];
+		std::cout << "net[3] okokokokok!" << std::endl;
 
 		value += net[4][get_feature(after, 0, 4,  8, 12)];
+		std::cout << "net[4] okokokokok!" << std::endl;
 		value += net[5][get_feature(after, 1, 5,  9, 13)];
+		std::cout << "net[5] okokokokok!" << std::endl;
 		value += net[6][get_feature(after, 2, 6, 10, 14)];
+		std::cout << "net[6] okokokokok!" << std::endl;
 		value += net[7][get_feature(after, 3, 7, 11, 15)];
+		std::cout << "net[7] okokokokok!" << std::endl;
 
 		return value;
 	}
