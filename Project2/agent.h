@@ -133,7 +133,10 @@ public:
 
 		adjust_value(record[record.size() - 1].after, 0);
 
+		std::cout << "record.size() - 2 = " << record.size() - 2 << std::endl; 
+
 		for(int i = record.size() - 2; i >= 0; i--){
+			std::cout << "i = " << i << std::endl;
 			float adjust_target = record[i+1].reward + calculate_value(record[i+1].after);
 			adjust_value(record[i].after, adjust_target);
 		}
