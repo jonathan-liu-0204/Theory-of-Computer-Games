@@ -12,6 +12,7 @@
 #include <random>
 #include <sstream>
 #include <map>
+#include <iostrean>
 #include <type_traits>
 #include <algorithm>
 #include <fstream>
@@ -132,6 +133,7 @@ public:
 	}
 
 	float calculate_value(const board& after){
+		std::cout << "I'm here!!!!!!!" << std::endl;
 		float value = 0;
 
 		value += net[0][get_feature(after,  0,  1,  2,  3)];
