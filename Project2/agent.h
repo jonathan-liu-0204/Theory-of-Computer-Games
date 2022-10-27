@@ -186,20 +186,20 @@ public:
 
 protected:
 	virtual void init_weights(const std::string& info) {
-		// std::string res = info; // comma-separated sizes, e.g., "65536,65536"
-		// for (char& ch : res)
-		// 	if (!std::isdigit(ch)) ch = ' ';
-		// std::stringstream in(res);
-		// for (size_t size; in >> size; net.emplace_back(size));
+		std::string res = info; // comma-separated sizes, e.g., "65536,65536"
+		for (char& ch : res)
+			if (!std::isdigit(ch)) ch = ' ';
+		std::stringstream in(res);
+		for (size_t size; in >> size; net.emplace_back(size));
 		// net.emplace_back(65536);
-		net.emplace_back(16 * 16 * 16 * 16);
-		net.emplace_back(16 * 16 * 16 * 16);
-		net.emplace_back(16 * 16 * 16 * 16);
-		net.emplace_back(16 * 16 * 16 * 16);
-		net.emplace_back(16 * 16 * 16 * 16);
-		net.emplace_back(16 * 16 * 16 * 16);
-		net.emplace_back(16 * 16 * 16 * 16);
-		net.emplace_back(16 * 16 * 16 * 16);
+		// net.emplace_back(16 * 16 * 16 * 16);
+		// net.emplace_back(16 * 16 * 16 * 16);
+		// net.emplace_back(16 * 16 * 16 * 16);
+		// net.emplace_back(16 * 16 * 16 * 16);
+		// net.emplace_back(16 * 16 * 16 * 16);
+		// net.emplace_back(16 * 16 * 16 * 16);
+		// net.emplace_back(16 * 16 * 16 * 16);
+		// net.emplace_back(16 * 16 * 16 * 16);
 
 		// std::cout << "Initial Net" << std::endl;
 	}
@@ -222,7 +222,7 @@ protected:
 	}
 
 protected:
-	std::vector<weight> net;
+	std::vector<weight> net {65536, 65536, 65536, 65536, 65536, 65536, 65536, 65536};
 	float alpha;
 };
 
