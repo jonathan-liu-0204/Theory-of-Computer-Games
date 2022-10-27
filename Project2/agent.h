@@ -70,9 +70,17 @@ protected:
 /**
  * base agent for agents with weight tables and a learning rate
  */
-class weight_agent : public agent {
+class tuple_agent : public agent {
 public:
-	weight_agent(const std::string& args = "") : agent(args), alpha(0) {
+
+	struct step{
+		int reward;
+		board after;
+	};
+
+	std::vector<step> record;
+
+	tuple_agent(const std::string& args = "") : agent("name=tuple role=player " + args), alpha(0) {
 		if (meta.find("init") != meta.end())
 			init_weights(meta["init"]);
 		if (meta.find("load") != meta.end())
@@ -80,9 +88,101 @@ public:
 		if (meta.find("alpha") != meta.end())
 			alpha = float(meta["alpha"]);
 	}
-	virtual ~weight_agent() {
+	virtual ~tuple_agent() {
 		if (meta.find("save") != meta.end())
 			save_weights(meta["save"]);
+	}
+
+	virtual action take_action(const board& before){
+		int best_op = -1;
+		int best_reward = -1;
+		float best_value = -1000000;
+
+		board best_after;
+
+		for(int op : {0, 1, 2, 3}){
+			board after = before;
+			int reward = after.slide(op);
+
+			if(reward == -1){
+				continue;
+			}
+
+			float value = calculate_value(after);
+
+			if((reward + value) > (best_reward + best_value)){
+				best_op = op;
+				best_after = after;
+				best_value = value;
+				best_reward = reward;
+			}
+		}
+
+		if(best_op != -1){
+			record.push_back({best_reward, best_after});
+		}
+
+		return action::slide(best_op);
+	}
+
+	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4){
+		int feature = after(vertice1) * pow(25, 3) + after(vertice2) * pow(25, 2) + after(vertice3) * 25 + after(vertice4);
+
+		return feature;
+	}
+
+	float calculate_value(const board& after){
+		float value = 0;
+
+		value += net[0][get_feature(after,  0,  1,  2,  3)];
+		value += net[1][get_feature(after,  4,  5,  6,  7)];
+		value += net[2][get_feature(after,  8,  9, 10, 11)];
+		value += net[3][get_feature(after, 12, 13, 14, 15)];
+
+		value += net[4][get_feature(after, 0, 4,  8, 12)];
+		value += net[5][get_feature(after, 1, 5,  9, 13)];
+		value += net[6][get_feature(after, 2, 6, 10, 14)];
+		value += net[07][get_feature(after, 3, 7, 11, 15)];
+
+		return value;
+	}
+
+	void adjust_value(const board& after, float target){
+		float current = calculate_value(after);
+		float offset = target - current;
+		float adjust = alpha * offset;
+
+
+		net[0][get_feature(after,  0,  1,  2,  3)] += adjust;
+		net[1][get_feature(after,  4,  5,  6,  7)] += adjust;
+		net[2][get_feature(after,  8,  9, 10, 11)] += adjust;
+		net[3][get_feature(after, 12, 13, 14, 15)] += adjust;
+
+		net[4][get_feature(after, 0, 4,  8, 12)] += adjust;
+		net[5][get_feature(after, 1, 5,  9, 13)] += adjust;
+		net[6][get_feature(after, 2, 6, 10, 14)] += adjust;
+		net[7][get_feature(after, 3, 7, 11, 15)] += adjust;
+	}
+
+	virtual void open_episode(const std::string& flag = ""){
+		record.clear();
+	}
+
+	virtual void close_episode(const std::string& flag = ""){
+		if(record.empty()){
+			return;
+		}
+
+		if(alpha == 0){
+			return;
+		}
+
+		adjust_value(record[record.size() - 1].after, 0);
+
+		for(int i = record.size() - 2; i >= 0; i--){
+			float adjust_target = record[i+1].reward + calculate_value(record[i+1].after);
+			adjust_value(record[i+1].after, adjust_target);
+		}
 	}
 
 protected:
@@ -160,7 +260,7 @@ private:
  */
 class random_slider : public random_agent {
 public:
-	random_slider(const std::string& args = "") : random_agent("name=slide role=slider " + args),
+	random_slider(const std::string& args = "") : random_agent("name=random_slide role=slider " + args),
 		opcode({ 0, 1, 2, 3 }) {}
 
 	virtual action take_action(const board& before) {
