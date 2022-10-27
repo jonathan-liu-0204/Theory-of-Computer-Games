@@ -126,13 +126,13 @@ public:
 		return action::slide(best_op);
 	}
 
-	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4){
+	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4) const{
 		int feature = after(vertice1) * 25 * 25 * 25 + after(vertice2) * 25 * 25 + after(vertice3) * 25 + after(vertice4);
 
 		return feature;
 	}
 
-	float calculate_value(const board& after){
+	float calculate_value(const board& after) const{
 		float value = 0;
 
 		value += net[0][get_feature(after,  0,  1,  2,  3)];
