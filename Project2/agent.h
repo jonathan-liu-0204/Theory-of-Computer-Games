@@ -152,10 +152,8 @@ public:
 
 	std::vector<step> record;
 
-		int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4) const{
-		int feature = after(vertice1) * 25 * 25 * 25 + after(vertice2) * 25 * 25 + after(vertice3) * 25 + after(vertice4);
-
-		return feature;
+	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4) const{
+		return after(vertice1) * 25 * 25 * 25 + after(vertice2) * 25 * 25 + after(vertice3) * 25 + after(vertice4);
 	}
 
 	float calculate_value(const board& after) const{
