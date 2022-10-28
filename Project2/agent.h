@@ -187,7 +187,7 @@ public:
 
 	// 8 x 6 Tuple
 	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4, int vertice5, int vertice6) const{
-		return after(vertice1) * 16 * 16 * 16 * 16 * 16 + after(vertice2) * 16 * 16 * 16 * 16 + after(vertice3) * 16 * 16 * 16 + after(vertice4) * 16 * 16 + after(vertice5) * 16 + after(vertice6);
+		return after(vertice1) * 15 * 15 * 15 * 15 * 15 + after(vertice2) * 15 * 15 * 15 * 15 + after(vertice3) * 15 * 15 * 15 + after(vertice4) * 15 * 15 + after(vertice5) * 15 + after(vertice6);
 	}
 
 	float calculate_value(const board& after) const{
@@ -342,10 +342,10 @@ protected:
 
 protected:
 	//std::vector<weight> net {16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216};
-	std::vector<weight> net {16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216};
-	std::vector<weight> net2 {16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216};
-	std::vector<weight> net3 {16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216};
-	std::vector<weight> net4 {16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216};
+	std::vector<weight> net {11390625, 11390625, 11390625, 11390625, 11390625, 11390625, 11390625, 11390625};
+	std::vector<weight> net2 {11390625, 11390625, 11390625, 11390625, 11390625, 11390625, 11390625, 11390625};
+	std::vector<weight> net3 {11390625, 11390625, 11390625, 11390625, 11390625, 11390625, 11390625, 11390625};
+	std::vector<weight> net4 {11390625, 11390625, 11390625, 11390625, 11390625, 11390625, 11390625, 11390625};
 	float alpha;
 };
 
