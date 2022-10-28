@@ -277,7 +277,7 @@ public:
 
 		net2[4][get_feature(after, 1, 2, 5, 6, 9, 10)] += adjust;
 		net2[5][get_feature(after, 5, 6, 9, 10, 13, 14)] += adjust;
-		net2[6][get_feature(after, 4, 5, 6, 8, 9, 104)] += adjust;
+		net2[6][get_feature(after, 4, 5, 6, 8, 9, 10)] += adjust;
 		net2[7][get_feature(after, 5, 6, 7, 9, 10, 1)] += adjust;
 
 
@@ -310,17 +310,6 @@ protected:
 			if (!std::isdigit(ch)) ch = ' ';
 		std::stringstream in(res);
 		for (size_t size; in >> size; net.emplace_back(size));
-		// net.emplace_back(65536);
-		// net.emplace_back(16 * 16 * 16 * 16);
-		// net.emplace_back(16 * 16 * 16 * 16);
-		// net.emplace_back(16 * 16 * 16 * 16);
-		// net.emplace_back(16 * 16 * 16 * 16);
-		// net.emplace_back(16 * 16 * 16 * 16);
-		// net.emplace_back(16 * 16 * 16 * 16);
-		// net.emplace_back(16 * 16 * 16 * 16);
-		// net.emplace_back(16 * 16 * 16 * 16);
-
-		// std::cout << "Initial Net" << std::endl;
 	}
 	virtual void load_weights(const std::string& path) {
 		std::ifstream in(path, std::ios::in | std::ios::binary);
