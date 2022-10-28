@@ -193,9 +193,9 @@ public:
 	float calculate_value(const board& after) const{
 		float value = 0;
 
-		// 0  1
-		// 4  5
-		// 8  9
+		// OO
+		// OO
+		// OO
 		//
 		value += net[0][get_feature(after, 0, 1, 2, 4, 5, 6)];
 		value += net[1][get_feature(after, 1, 2, 3, 5, 6, 7)];
@@ -207,9 +207,9 @@ public:
 		value += net[6][get_feature(after, 4, 5, 8, 9, 12, 13)];
 		value += net[7][get_feature(after, 6, 7, 10, 11, 14, 15)];
 
-		// 1  2
-		// 5  6
-		// 9 10
+		// OO
+		// OO
+		// OO (at mid)
 		//
 		value += net2[0][get_feature(after, 1, 2, 5, 6, 9, 10)];
 		value += net2[1][get_feature(after, 5, 6, 9, 10, 13, 14)];
@@ -221,9 +221,10 @@ public:
 		value += net2[6][get_feature(after, 4, 5, 6, 8, 9, 10)];
 		value += net2[7][get_feature(after, 5, 6, 7, 9, 10, 11)];
 
-		// 0  1     1  2
-		// 4  5  &  5  6 
-		// 9 10
+		// OO
+		// OO
+		// O
+		// O
 		//
 		value += net3[0][get_feature(after, 0, 1, 4, 5, 8, 12)];
 		value += net3[1][get_feature(after, 0, 1, 2, 3, 6, 7)];
@@ -235,9 +236,10 @@ public:
 		value += net3[6][get_feature(after, 2, 3, 6, 7, 11, 15)];
 		value += net3[7][get_feature(after, 0, 1, 2, 3, 4, 5)];
 
-		// 0  1     1  2
-		// 4  5  &  5  6 
-		// 8  9     9 10
+		// OO
+		// OO
+		// O
+		// O  (at mid)
 		//
 		value += net4[0][get_feature(after, 1, 2, 5, 6, 9, 13)];
 		value += net4[1][get_feature(after, 4, 5, 6, 7, 10, 11)];
