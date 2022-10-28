@@ -147,22 +147,61 @@ public:
 
 	std::vector<step> record;
 
-	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4) const{
-		return after(vertice1) * 16 * 16 * 16 + after(vertice2) * 16 * 16 + after(vertice3) * 16 + after(vertice4);
+	// 8 x 4 Tuple
+	//
+	// int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4) const{
+	// 	return after(vertice1) * 16 * 16 * 16 + after(vertice2) * 16 * 16 + after(vertice3) * 16 + after(vertice4);
+	// }
+
+	// float calculate_value(const board& after) const{
+	// 	float value = 0;
+
+	// 	value += net[0][get_feature(after,  0,  1,  2,  3)];
+	// 	value += net[1][get_feature(after,  4,  5,  6,  7)];
+	// 	value += net[2][get_feature(after,  8,  9, 10, 11)];
+	// 	value += net[3][get_feature(after, 12, 13, 14, 15)];
+
+	// 	value += net[4][get_feature(after, 0, 4,  8, 12)];
+	// 	value += net[5][get_feature(after, 1, 5,  9, 13)];
+	// 	value += net[6][get_feature(after, 2, 6, 10, 14)];
+	// 	value += net[7][get_feature(after, 3, 7, 11, 15)];
+
+	// 	return value;
+	// }
+
+	// void adjust_value(const board& after, float target){
+	// 	float current = calculate_value(after);
+	// 	float offset = target - current;
+	// 	float adjust = alpha * offset;
+
+	// 	net[0][get_feature(after,  0,  1,  2,  3)] += adjust;
+	// 	net[1][get_feature(after,  4,  5,  6,  7)] += adjust;
+	// 	net[2][get_feature(after,  8,  9, 10, 11)] += adjust;
+	// 	net[3][get_feature(after, 12, 13, 14, 15)] += adjust;
+
+	// 	net[4][get_feature(after, 0, 4,  8, 12)] += adjust;
+	// 	net[5][get_feature(after, 1, 5,  9, 13)] += adjust;
+	// 	net[6][get_feature(after, 2, 6, 10, 14)] += adjust;
+	// 	net[7][get_feature(after, 3, 7, 11, 15)] += adjust;
+	// }
+
+	// 8 x 6 Tuple
+	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4, int vertice5, int vertice6) const{
+		return after(vertice1) * 16 * 16 * 16 * 16 * 16 + after(vertice2) * 16 * 16 * 16 * 16 + after(vertice3) * 16 * 16 * 16 + after(vertice4) * 16 * 16 + after(vertice5) * 16 + after(vertice6);
 	}
 
 	float calculate_value(const board& after) const{
 		float value = 0;
 
-		value += net[0][get_feature(after,  0,  1,  2,  3)];
-		value += net[1][get_feature(after,  4,  5,  6,  7)];
-		value += net[2][get_feature(after,  8,  9, 10, 11)];
-		value += net[3][get_feature(after, 12, 13, 14, 15)];
+		value += net[0][get_feature(after, 0, 1, 2, 4, 5, 6)];
+		value += net[1][get_feature(after, 1, 2, 3, 5, 6, 7)];
+		value += net[2][get_feature(after, 8, 9, 10, 12, 13, 14)];
+		value += net[3][get_feature(after, 9, 10, 11, 13, 14, 15)];
 
-		value += net[4][get_feature(after, 0, 4,  8, 12)];
-		value += net[5][get_feature(after, 1, 5,  9, 13)];
-		value += net[6][get_feature(after, 2, 6, 10, 14)];
-		value += net[7][get_feature(after, 3, 7, 11, 15)];
+		value += net[4][get_feature(after, 0, 4, 8, 1, 5, 9)];
+		value += net[5][get_feature(after, 2, 6, 10, 3, 7, 11)];
+		value += net[6][get_feature(after, 4, 8, 12, 5, 9, 13)];
+		value += net[7][get_feature(after, 6, 10, 14, 7, 11, 15)];
 
 		return value;
 	}
@@ -172,15 +211,15 @@ public:
 		float offset = target - current;
 		float adjust = alpha * offset;
 
-		net[0][get_feature(after,  0,  1,  2,  3)] += adjust;
-		net[1][get_feature(after,  4,  5,  6,  7)] += adjust;
-		net[2][get_feature(after,  8,  9, 10, 11)] += adjust;
-		net[3][get_feature(after, 12, 13, 14, 15)] += adjust;
+		net[0][get_feature(after, 0, 1, 2, 4, 5, 6)] += adjust;
+		net[1][get_feature(after, 1, 2, 3, 5, 6, 7)] += adjust;
+		net[2][get_feature(after, 8, 9, 10, 12, 13, 14)] += adjust;
+		net[3][get_feature(after, 9, 10, 11, 13, 14, 15)] += adjust;
 
-		net[4][get_feature(after, 0, 4,  8, 12)] += adjust;
-		net[5][get_feature(after, 1, 5,  9, 13)] += adjust;
-		net[6][get_feature(after, 2, 6, 10, 14)] += adjust;
-		net[7][get_feature(after, 3, 7, 11, 15)] += adjust;
+		net[4][get_feature(after, 0, 4, 8, 1, 5, 9)] += adjust;
+		net[5][get_feature(after, 2, 6, 10, 3, 7, 11)] += adjust;
+		net[6][get_feature(after, 4, 8, 12, 5, 9, 13)] += adjust;
+		net[7][get_feature(after, 6, 10, 14, 7, 11, 15)] += adjust;
 	}
 
 protected:
@@ -221,7 +260,7 @@ protected:
 	}
 
 protected:
-	std::vector<weight> net {65536, 65536, 65536, 65536, 65536, 65536, 65536, 65536};
+	std::vector<weight> net {16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216};
 	float alpha;
 };
 
