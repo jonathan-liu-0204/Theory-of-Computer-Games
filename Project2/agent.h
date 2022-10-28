@@ -193,15 +193,61 @@ public:
 	float calculate_value(const board& after) const{
 		float value = 0;
 
+		// 0  1
+		// 4  5
+		// 8  9
+		//
 		value += net[0][get_feature(after, 0, 1, 2, 4, 5, 6)];
 		value += net[1][get_feature(after, 1, 2, 3, 5, 6, 7)];
 		value += net[2][get_feature(after, 8, 9, 10, 12, 13, 14)];
 		value += net[3][get_feature(after, 9, 10, 11, 13, 14, 15)];
 
-		value += net[4][get_feature(after, 0, 4, 8, 1, 5, 9)];
-		value += net[5][get_feature(after, 2, 6, 10, 3, 7, 11)];
-		value += net[6][get_feature(after, 4, 8, 12, 5, 9, 13)];
-		value += net[7][get_feature(after, 6, 10, 14, 7, 11, 15)];
+		value += net[4][get_feature(after, 1, 5, 9, 0, 4, 8)];
+		value += net[5][get_feature(after, 3, 7, 11, 2, 6, 10)];
+		value += net[6][get_feature(after, 5, 9, 13, 4, 8, 12)];
+		value += net[7][get_feature(after, 7, 11, 15, 6, 10, 14)];
+
+		// 1  2
+		// 5  6
+		// 9 10
+		//
+		value += net2[0][get_feature(after, 2, 6, 10, 1, 5, 9)];
+		value += net2[1][get_feature(after, 6, 10, 14, 5, 9, 13)];
+		value += net2[2][get_feature(after, 4, 5, 6, 8, 9, 10)];
+		value += net2[3][get_feature(after, 5, 6, 7, 9, 10, 11)];
+
+		value += net2[4][get_feature(after, 9, 5, 1, 10, 6, 2)];
+		value += net2[5][get_feature(after, 13, 9, 5, 14, 10, 6)];
+		value += net2[6][get_feature(after, 10, 9, 8, 6, 5, 4)];
+		value += net2[7][get_feature(after, 11, 10, 9, 7, 6, 5)];
+
+		// 0  1     1  2
+		// 4  5  &  5  6 
+		// 9 10
+		//
+		value += net3[0][get_feature(after, 5, 1, 0, 4, 8, 12)];
+		value += net3[1][get_feature(after, 6, 7, 3, 2, 1, 0)];
+		value += net3[2][get_feature(after, 10, 14, 15, 11, 7, 3)];
+		value += net3[3][get_feature(after, 9, 8, 12, 13, 14, 15)];
+
+		value += net3[4][get_feature(after, 9, 13, 12, 8, 4, 0)];
+		value += net3[5][get_feature(after, 10, 11, 15, 14, 13, 12)];
+		value += net3[6][get_feature(after, 6, 2, 3, 7, 11, 15)];
+		value += net3[7][get_feature(after, 5, 4, 0, 1, 2, 3)];
+
+		// 0  1     1  2
+		// 4  5  &  5  6 
+		// 8  9     9 10
+		//
+		value += net4[0][get_feature(after, 6, 2, 1, 5, 9, 13)];
+		value += net4[1][get_feature(after, 10, 11, 7, 6, 5, 4)];
+		value += net4[2][get_feature(after, 9, 13, 14, 10, 6, 2)];
+		value += net4[3][get_feature(after, 5, 4, 8, 9, 10, 11)];
+
+		value += net4[4][get_feature(after, 10, 14, 13, 9, 5, 1)];
+		value += net4[5][get_feature(after, 6, 7, 11, 10, 9, 8)];
+		value += net4[6][get_feature(after, 5, 1, 2, 6, 10, 14)];
+		value += net4[7][get_feature(after, 9, 8, 4, 5, 6, 7)];
 
 		return value;
 	}
@@ -216,10 +262,42 @@ public:
 		net[2][get_feature(after, 8, 9, 10, 12, 13, 14)] += adjust;
 		net[3][get_feature(after, 9, 10, 11, 13, 14, 15)] += adjust;
 
-		net[4][get_feature(after, 0, 4, 8, 1, 5, 9)] += adjust;
-		net[5][get_feature(after, 2, 6, 10, 3, 7, 11)] += adjust;
-		net[6][get_feature(after, 4, 8, 12, 5, 9, 13)] += adjust;
-		net[7][get_feature(after, 6, 10, 14, 7, 11, 15)] += adjust;
+		net[4][get_feature(after, 1, 5, 9, 0, 4, 8)] += adjust;
+		net[5][get_feature(after, 3, 7, 11, 2, 6, 10)] += adjust;
+		net[6][get_feature(after, 5, 9, 13, 4, 8, 12)] += adjust;
+		net[7][get_feature(after, 7, 11, 15, 6, 10, 14)] += adjust;
+
+
+		net2[0][get_feature(after, 2, 6, 10, 1, 5, 9)] += adjust;
+		net2[1][get_feature(after, 6, 10, 14, 5, 9, 13)] += adjust;
+		net2[2][get_feature(after, 4, 5, 6, 8, 9, 10)] += adjust;
+		net2[3][get_feature(after, 5, 6, 7, 9, 10, 11)] += adjust;
+
+		net2[4][get_feature(after, 9, 5, 1, 10, 6, 2)] += adjust;
+		net2[5][get_feature(after, 13, 9, 5, 14, 10, 6)] += adjust;
+		net2[6][get_feature(after, 10, 9, 8, 6, 5, 4)] += adjust;
+		net2[7][get_feature(after, 11, 10, 9, 7, 6, 5)] += adjust;
+
+
+		net3[0][get_feature(after, 5, 1, 0, 4, 8, 12)] += adjust;
+		net3[1][get_feature(after, 6, 7, 3, 2, 1, 0)] += adjust;
+		net3[2][get_feature(after, 10, 14, 15, 11, 7, 3)] += adjust;
+		net3[3][get_feature(after, 9, 8, 12, 13, 14, 15)] += adjust;
+
+		net3[4][get_feature(after, 9, 13, 12, 8, 4, 0)] += adjust;
+		net3[5][get_feature(after, 10, 11, 15, 14, 13, 12)] += adjust;
+		net3[6][get_feature(after, 6, 2, 3, 7, 11, 15)] += adjust;
+		net3[7][get_feature(after, 5, 4, 0, 1, 2, 3)] += adjust;
+
+		net4[0][get_feature(after, 6, 2, 1, 5, 9, 13)] += adjust;
+		net4[1][get_feature(after, 10, 11, 7, 6, 5, 4)] += adjust;
+		net4[2][get_feature(after, 9, 13, 14, 10, 6, 2)] += adjust;
+		net4[3][get_feature(after, 5, 4, 8, 9, 10, 11)] += adjust;
+
+		net4[4][get_feature(after, 10, 14, 13, 9, 5, 1)] += adjust;
+		net4[5][get_feature(after, 6, 7, 11, 10, 9, 8)] += adjust;
+		net4[6][get_feature(after, 5, 1, 2, 6, 10, 14)] += adjust;
+		net4[7][get_feature(after, 9, 8, 4, 5, 6, 7)] += adjust;
 	}
 
 protected:
@@ -260,7 +338,11 @@ protected:
 	}
 
 protected:
-	std::vector<weight> net {16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216};
+	//std::vector<weight> net {16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216, 16777216};
+	std::vector<weight> net {11943936, 11943936, 11943936, 11943936, 11943936, 11943936, 11943936, 11943936};
+	std::vector<weight> net2 {11943936, 11943936, 11943936, 11943936, 11943936, 11943936, 11943936, 11943936};
+	std::vector<weight> net3 {11943936, 11943936, 11943936, 11943936, 11943936, 11943936, 11943936, 11943936};
+	std::vector<weight> net4 {11943936, 11943936, 11943936, 11943936, 11943936, 11943936, 11943936, 11943936};
 	float alpha;
 };
 
