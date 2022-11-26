@@ -193,7 +193,6 @@ public:
  						break;
  					}
  				}
- 				win = true;
  			}
 			// the opponent's move
  			else if(count % 2 == 1 ){
@@ -206,7 +205,6 @@ public:
  						break;
  					}
  				}
- 				win = false;
  			}
 
  			if(!exist_legal_move){
