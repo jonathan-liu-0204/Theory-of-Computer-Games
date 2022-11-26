@@ -129,8 +129,8 @@ public:
  		float max =- 100;
 
 		for(size_t i = 0 ; i <root->childs.size(); i++){
- 			if(root->childs[i]->uct_value > max){
- 				max = root->childs[i]->uct_value;
+ 			if(root->childs[i]->visit_count > max){
+ 				max = root->childs[i]->visit_count;
  				index = i;
  			}
  		}
