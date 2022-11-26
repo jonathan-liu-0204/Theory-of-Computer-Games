@@ -116,12 +116,12 @@ public:
 		return action();
 
 		//default shuffle policy
-		std::shuffle(space.begin(), space.end(), engine);
-		for (const action::place& move : space) {
-			board after = state;
-			// if (move.apply(after) == board::legal)
-			// 	return move;
-		}
+		// std::shuffle(space.begin(), space.end(), engine);
+		// for (const action::place& move : space) {
+		// 	board after = state;
+		// 	if (move.apply(after) == board::legal)
+		// 		return move;
+		// }
 		// return action();
 	}
 
