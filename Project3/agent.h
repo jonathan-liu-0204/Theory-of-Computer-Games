@@ -15,6 +15,7 @@
 #include <type_traits>
 #include <algorithm>
 #include <fstream>
+#include <unistd.h>
 #include "board.h"
 #include "action.h"
 
@@ -57,10 +58,11 @@ protected:
 class random_agent : public agent {
 public:
 	random_agent(const std::string& args = "") : agent(args) {
-		if (meta.find("seed") != meta.end())
+		if (meta.find("seed") != meta.end()){
 			engine.seed(int(meta["seed"]));
+		}
 	}
-	virtual ~random_agent() {}
+	virtual ~random_agent(){}
 
 protected:
 	std::default_random_engine engine;
@@ -73,62 +75,227 @@ protected:
 class player : public random_agent {
 public:
 	player(const std::string& args = "") : random_agent("name=random role=unknown " + args),
-		space(board::size_x * board::size_y), who(board::empty) {
-		if (name().find_first_of("[]():; ") != std::string::npos)
+		space(board::size_x * board::size_y), opp_space(board::size_x * board::size_y), who(board::empty){
+
+		if (name().find_first_of("[]():; ") != std::string::npos){
 			throw std::invalid_argument("invalid name: " + name());
-		if (role() == "black") who = board::black;
-		if (role() == "white") who = board::white;
-		if (who == board::empty)
+		}
+		if (role() == "black"){
+			who = board::black;
+		}
+		if (role() == "white"){
+			who = board::white;
+		}
+		if (who == board::empty){
 			throw std::invalid_argument("invalid role: " + role());
-		for (size_t i = 0; i < space.size(); i++)
+		}
+		for (size_t i = 0; i < space.size(); i++){
 			space[i] = action::place(i, who);
+			if(who == board::black){
+				opp_space[i] = action::place(i, board::white);
+			}
+ 			if(who == board::white){
+				opp_space[i] = action::place(i, board::black);
+			}
+		}
 	}
 
 	virtual action take_action(const board& state) {
-		//save first layer
+		node* root = new_node(state);
+ 		while(total_count < 200){
+ 			update_nodes.push_back(root);
+ 			insert(root,state);
+ 		}
+ 		total_count = 0;
+
+		//find the best child 
+ 		int index = -1;
+ 		float max = max - 100;
+
+ 		if(root->childs.size() == 0){
+			return action();
+		}
+
+		for(size_t i = 0 ; i <root->childs.size(); i++){
+ 			if(root->childs[i]->uct_value > max){
+ 				max = root->childs[i]->uct_value;
+ 				index = i;
+ 			}
+ 		}
+
 		for (const action::place& move : space) {
 			board after = state;
-			// take legal move
 			if (move.apply(after) == board::legal){
-				action::place tmp = move ;
-				child.push_back(move);
-				//random simulation
-				bool end = false;
-				bool win = true;
-				int count = 0 ;
-				while(!end){
-					bool find = false;
-					std::shuffle(space.begin(), space.end(), engine);
-					for (const action::place& move : space) {
-						if (move.apply(after) == board::legal){
-							find = true;
-							count++; 
-							break;
-						}
-					}
-					if(count %2 == 0 ) win = true;
-					if(count %2 == 1 ) win = false;
-					if(!find) end = true;
+				if(after == root->childs[index]->state){
+					return move;
 				}
-				if(win) return tmp;
 			}
 		}
 		return action();
-
-		//default shuffle policy
-		// std::shuffle(space.begin(), space.end(), engine);
-		// for (const action::place& move : space) {
-		// 	board after = state;
-		// 	if (move.apply(after) == board::legal)
-		// 		return move;
-		// }
-		// return action();
 	}
+
+	struct node{
+ 		board state;
+ 		int visit_count;
+ 		int win_count;
+ 		float uct_value;
+ 		std::vector<node*> childs;
+ 	};
+
+	struct node* new_node(board state){
+ 		struct node* current_node = new struct node;
+ 		current_node->visit_count = 0;
+ 		current_node->win_count = 0;
+ 		current_node->uct_value = 10000;
+ 		current_node->state = state;
+ 		return current_node;
+ 	}
+
+	bool simulation(struct node * current_node){
+ 		board after = current_node->state;
+ 		bool end = false;
+ 		bool win = true;
+ 		int count = 0 ;
+
+ 		while(!end){
+ 			bool exist_legal_move = false;
+
+			// our move
+ 			if(count % 2 == 0 ){
+ 				std::shuffle(space.begin(), space.end(), engine);
+ 				for (const action::place& move : space){
+ 					if (move.apply(after) == board::legal){
+ 						exist_legal_move = true;
+ 						count++; 
+ 						break;
+ 					}
+ 				}
+ 				win = true;
+ 			}
+			// the opponent's move
+ 			else if(count % 2 == 1 ){
+ 				std::shuffle(opp_space.begin(), opp_space.end(), engine);
+ 				for (const action::place& move : opp_space){
+ 					if (move.apply(after) == board::legal){
+ 						exist_legal_move = true;
+ 						count++; 
+ 						break;
+ 					}
+ 				}
+ 				win = false;
+ 			}
+
+ 			if(!exist_legal_move){
+				end = true;
+			}
+ 		}
+
+ 		total_count++;
+ 		return win;
+ 	}
+
+	void insert(struct node* root, board state){
+ 		// collect child
+ 		size_t number_of_legal_move = 0;
+ 		if(update_nodes.size()%2 == 1){
+ 			for (const action::place& move : space) {
+ 				board after = state;
+
+ 				if (move.apply(after) == board::legal){
+ 					if(root->childs.size() <= number_of_legal_move++){
+ 						struct node * current_node = new_node(after);		
+ 						root->childs.push_back(current_node);
+ 					}
+ 				}
+ 			}
+ 		}
+ 		else{
+ 			for (const action::place& move : opp_space) {
+ 				board after = state;
+ 				if (move.apply(after) == board::legal){
+ 					if(root->childs.size() <= number_of_legal_move++){
+ 						struct node * current_node = new_node(after);		
+ 						root->childs.push_back(current_node);
+ 					}
+ 				}
+ 			}
+ 		}
+
+ 		// do simulation
+ 		if(root->visit_count == 0) {
+ 			bool win = simulation(root);
+ 			update(win);
+ 		}
+ 		else {
+ 			int index = -1;
+ 			float max = max - 100;
+ 			size_t child_visit_count = 0;
+ 			bool do_expand = true;
+
+ 			//get number of child have been visited
+ 			for(size_t i = 0 ; i < root->childs.size(); i++) {
+ 				if(root->childs[i]->visit_count != 0)
+ 					child_visit_count++;
+ 			}
+
+ 			// check need expand or not
+ 			if(child_visit_count == number_of_legal_move){
+				do_expand = false;
+			}
+
+ 			if(number_of_legal_move == 0){
+ 				bool win = simulation(root);
+ 				update(win);
+ 				return;
+ 			} 
+
+ 			if(do_expand){
+ 				for(size_t i = 0 ; i < root->childs.size(); i++){
+ 					if(root->childs[i]->uct_value > max && root->childs[i]->visit_count == 0){
+ 						max = root->childs[i]->uct_value;
+ 						index = i;
+ 					}
+ 				}
+ 				update_nodes.push_back(root->childs[index]);
+ 				insert(root->childs[index], root->childs[index]->state);
+
+ 			}
+			else{
+ 				for(size_t i = 0 ; i < root->childs.size(); i++){
+ 					if(root->childs[i]->uct_value > max){
+ 						max = root->childs[i]->uct_value;
+ 						index = i;
+ 					}
+ 				}
+ 				update_nodes.push_back(root->childs[index]);
+ 				insert(root->childs[index], root->childs[index]->state);
+ 			}
+ 		}
+ 	}
+
+	void update(bool win){
+ 		float value = 0;
+
+ 		if(win){
+			value = 1;
+		}
+		
+ 		for (size_t i = 0 ; i < update_nodes.size() ; i++){
+ 			update_nodes[i]->visit_count++;
+ 			update_nodes[i]->win_count += value;	
+ 			update_nodes[i]->uct_value = (update_nodes[i]->win_count / update_nodes[i]->visit_count) + 0.1 * (log(total_count) / update_nodes[i]->visit_count);		
+ 		}
+
+ 		// clear total_count and update_nodes
+ 		update_nodes.clear();
+ 	}
+
+	float total_count = 0.0;
+	std::vector<node*> update_nodes;
 
 private:
 	std::vector<action::place> space;
 	board::piece_type who;
 
-	//for saving first player
-	std::vector<action::place> child;
+	std::vector<action::place> opp_space;
 };
