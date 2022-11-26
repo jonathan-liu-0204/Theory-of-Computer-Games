@@ -227,7 +227,7 @@ public:
  					if (move.apply(after) == board::legal){
  						exist_legal_move = true;
  						count++; 
-						win = true;
+						win = false;
  						break;
  					}
  				}
@@ -239,7 +239,7 @@ public:
  					if (move.apply(after) == board::legal){
  						exist_legal_move = true;
  						count++; 
-						win = false;
+						win = true;
  						break;
  					}
  				}
