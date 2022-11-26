@@ -119,10 +119,10 @@ public:
 		std::shuffle(space.begin(), space.end(), engine);
 		for (const action::place& move : space) {
 			board after = state;
-			if (move.apply(after) == board::legal)
-				return move;
+			// if (move.apply(after) == board::legal)
+			// 	return move;
 		}
-		return action();
+		// return action();
 	}
 
 private:
