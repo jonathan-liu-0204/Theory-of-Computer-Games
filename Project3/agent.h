@@ -149,7 +149,7 @@ public:
 		if(option=="win_rate"){
  			for(size_t i = 0 ; i <root->childs.size(); i++){
  				float cuurent_win_rate = root->childs[i]->win_count / root->childs[i]->visit_count ;
- 				if(cuurent_win_rate>max){
+ 				if(cuurent_win_rate > max){
  					max = cuurent_win_rate;
  					index = i;
  				}
@@ -157,7 +157,7 @@ public:
  		}
  		else if(option=="visit_count"){
  			for(size_t i = 0 ; i <root->childs.size(); i++){
- 				if(root->childs[i]->visit_count>max){
+ 				if(root->childs[i]->visit_count > max){
  					max = root->childs[i]->visit_count;
  					index = i;
  				}
@@ -165,8 +165,8 @@ public:
  		}
  		else if(option=="uct_value"){
  			for(size_t i = 0 ; i <root->childs.size(); i++){
- 				if(root->childs[i]->visit_count>max){
- 					max = root->childs[i]->visit_count;
+ 				if(root->childs[i]->visit_count > max){
+ 					max = root->childs[i]->uct_value;
  					index = i;
  				}
  			}
@@ -181,15 +181,14 @@ public:
 				}
 			}
 		}
-
 		delete_node(root);
 		return action();
 	}
 
 	struct node{
  		board state;
- 		int visit_count;
- 		int win_count;
+ 		float visit_count;
+ 		float win_count;
  		float uct_value;
  		std::vector<node*> childs;
  	};
@@ -288,7 +287,7 @@ public:
  			bool win = simulation(root);
  			update(win);
  		}
- 		else {
+ 		else{
  			int index = -1;
  			float max =- 100;
  			size_t child_visit_count = 0;
@@ -342,10 +341,10 @@ public:
 			value = 1;
 		}
 		
- 		for (size_t i = 0 ; i < update_nodes.size() ; i++){
+ 		for(size_t i = 0 ; i < update_nodes.size() ; i++){
  			update_nodes[i]->visit_count++;
  			update_nodes[i]->win_count += value;	
- 			update_nodes[i]->uct_value = (update_nodes[i]->win_count / update_nodes[i]->visit_count) + weight * (log(total_count) / update_nodes[i]->visit_count);		
+ 			update_nodes[i]->uct_value = (update_nodes[i]->win_count / update_nodes[i]->visit_count) + weight * log(total_count) / update_nodes[i]->visit_count;		
  		}
 
  		// clear total_count and update_nodes
@@ -353,7 +352,7 @@ public:
  	}
 
 	void delete_node(struct node * root){
- 		for(size_t i = 0 ; i<root->childs.size(); i++)
+ 		for(size_t i = 0 ; i < root->childs.size(); i++)
  			delete_node(root->childs[i]);
  		delete(root);
  	}
