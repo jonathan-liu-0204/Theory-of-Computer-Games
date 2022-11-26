@@ -120,11 +120,7 @@ public:
 
 		//find the best child 
  		int index = -1;
- 		float max = max - 100;
-
- 		if(root->childs.size() == 0){
-			return action();
-		}
+ 		float max =- 100;
 
 		for(size_t i = 0 ; i <root->childs.size(); i++){
  			if(root->childs[i]->uct_value > max){
@@ -253,7 +249,7 @@ public:
  		}
  		else {
  			int index = -1;
- 			float max = max - 100;
+ 			float max =- 100;
  			size_t child_visit_count = 0;
  			bool do_expand = true;
 
