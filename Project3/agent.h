@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <fstream>
 #include <unistd.h>
+#include <ctime>
 #include "board.h"
 #include "action.h"
 
@@ -106,10 +107,16 @@ public:
 		simulation_count = stoi(property("N"));
 		weight = stof(property("c"));
 
- 		while(total_count < simulation_count){
+		std::clock_t start_time = std::clock();
+
+ 		while(1){
 			our_turn = true;
  			update_nodes.push_back(root);
  			insert(root,state);
+
+			if((std::clock() - start_time) / (double)CLOCKS_PER_SEC > 1){
+				break;
+			}
  		}
 
  		total_count = 0;
