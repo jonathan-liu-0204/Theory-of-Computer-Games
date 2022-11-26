@@ -121,7 +121,7 @@ public:
  				}
  			}
  		}
- 		if(timer == 0){
+ 		else if(timer == 0){
  			while(total_count<simulation_count){
  				our_turn = true;
  				update_nodes.push_back(root);
@@ -155,7 +155,7 @@ public:
  				}
  			}
  		}
- 		if(option=="visit_count"){
+ 		else if(option=="visit_count"){
  			for(size_t i = 0 ; i <root->childs.size(); i++){
  				if(root->childs[i]->visit_count>max){
  					max = root->childs[i]->visit_count;
@@ -163,7 +163,7 @@ public:
  				}
  			}
  		}
- 		if(option=="uct_value"){
+ 		else if(option=="uct_value"){
  			for(size_t i = 0 ; i <root->childs.size(); i++){
  				if(root->childs[i]->visit_count>max){
  					max = root->childs[i]->visit_count;
