@@ -251,7 +251,7 @@ public:
  		}
 
  		total_count++;
- 		return win;
+ 		return true;
  	}
 
 	void insert(struct node* root, board state){
