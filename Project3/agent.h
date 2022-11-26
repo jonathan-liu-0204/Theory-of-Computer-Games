@@ -107,11 +107,10 @@ public:
 		simulation_count = stoi(property("N"));
 		weight = stof(property("c"));
 
-		timer = stoi(property("timer"));
-		option = property("choose");
+		// timer = stoi(property("timer"));
+		// option = property("choose");
 
- 		if(timer == 1){
- 			std::clock_t start_time = std::clock(); // get current time
+		std::clock_t start_time = std::clock(); // get current time
  			while(1){
  				our_turn = true;
  				update_nodes.push_back(root);
@@ -120,14 +119,25 @@ public:
  					break;
  				}
  			}
- 		}
- 		else if(timer == 0){
- 			while(total_count<simulation_count){
- 				our_turn = true;
- 				update_nodes.push_back(root);
- 				insert(root,state);
- 			}
- 		}
+
+ 		// if(timer == 1){
+ 		// 	std::clock_t start_time = std::clock(); // get current time
+ 		// 	while(1){
+ 		// 		our_turn = true;
+ 		// 		update_nodes.push_back(root);
+ 		// 		insert(root,state);
+ 		// 		if( (std::clock() - start_time)/ (double) CLOCKS_PER_SEC > 1) {
+ 		// 			break;
+ 		// 		}
+ 		// 	}
+ 		// }
+ 		// else if(timer == 0){
+ 		// 	while(total_count<simulation_count){
+ 		// 		our_turn = true;
+ 		// 		update_nodes.push_back(root);
+ 		// 		insert(root,state);
+ 		// 	}
+ 		// }
 
  		total_count = 0;
 
@@ -139,38 +149,38 @@ public:
  		int index = -1;
  		float max =- 100;
 
-		// for(size_t i = 0 ; i <root->childs.size(); i++){
- 		// 	if(root->childs[i]->uct_value > max){
- 		// 		max = root->childs[i]->uct_value;
- 		// 		index = i;
+		for(size_t i = 0 ; i <root->childs.size(); i++){
+ 			if(root->childs[i]->uct_value > max){
+ 				max = root->childs[i]->uct_value;
+ 				index = i;
+ 			}
+ 		}
+
+		// if(option=="win_rate"){
+ 		// 	for(size_t i = 0 ; i <root->childs.size(); i++){
+ 		// 		float cuurent_win_rate = root->childs[i]->win_count / root->childs[i]->visit_count ;
+ 		// 		if(cuurent_win_rate > max){
+ 		// 			max = cuurent_win_rate;
+ 		// 			index = i;
+ 		// 		}
  		// 	}
  		// }
-
-		if(option=="win_rate"){
- 			for(size_t i = 0 ; i <root->childs.size(); i++){
- 				float cuurent_win_rate = root->childs[i]->win_count / root->childs[i]->visit_count ;
- 				if(cuurent_win_rate > max){
- 					max = cuurent_win_rate;
- 					index = i;
- 				}
- 			}
- 		}
- 		else if(option=="visit_count"){
- 			for(size_t i = 0 ; i <root->childs.size(); i++){
- 				if(root->childs[i]->visit_count > max){
- 					max = root->childs[i]->visit_count;
- 					index = i;
- 				}
- 			}
- 		}
- 		else if(option=="uct_value"){
- 			for(size_t i = 0 ; i <root->childs.size(); i++){
- 				if(root->childs[i]->visit_count > max){
- 					max = root->childs[i]->uct_value;
- 					index = i;
- 				}
- 			}
- 		}
+ 		// else if(option=="visit_count"){
+ 		// 	for(size_t i = 0 ; i <root->childs.size(); i++){
+ 		// 		if(root->childs[i]->visit_count > max){
+ 		// 			max = root->childs[i]->visit_count;
+ 		// 			index = i;
+ 		// 		}
+ 		// 	}
+ 		// }
+ 		// else if(option=="uct_value"){
+ 		// 	for(size_t i = 0 ; i <root->childs.size(); i++){
+ 		// 		if(root->childs[i]->visit_count > max){
+ 		// 			max = root->childs[i]->uct_value;
+ 		// 			index = i;
+ 		// 		}
+ 		// 	}
+ 		// }
 
 		for (const action::place& move : space) {
 			board after = state;
