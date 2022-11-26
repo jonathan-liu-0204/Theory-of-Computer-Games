@@ -107,8 +107,8 @@ public:
 		simulation_count = stoi(property("N"));
 		weight = stof(property("c"));
 
-		int timer = stoi(property("timer"));
-		std::string option = property("choose");
+		timer = stoi(property("timer"));
+		option = property("choose");
 
  		if(timer == 1){
  			std::clock_t start_time = std::clock(); // get current time
@@ -210,12 +210,12 @@ public:
  		int count = 0 ;
 
 		if(our_turn == true) {
- 			win = true;
- 			count = 1;
+ 			win = false;
+ 			count = 0;
  		}
 		else{
-			win = false;
- 			count = 0;
+			win = true;
+ 			count = 1;
 		}
 
  		while(!end){
@@ -270,7 +270,6 @@ public:
  					}
  				}
  			}
-			our_turn = false;
  		}
  		else{
  			for (const action::place& move : opp_space) {
@@ -282,7 +281,6 @@ public:
  					}
  				}
  			}
-			our_turn = true;
  		}
 
  		// do simulation
@@ -322,9 +320,6 @@ public:
  						index = i;
  					}
  				}
- 				update_nodes.push_back(root->childs[index]);
- 				insert(root->childs[index], root->childs[index]->state);
-
  			}
 			else{
  				for(size_t i = 0 ; i < root->childs.size(); i++){
@@ -333,9 +328,10 @@ public:
  						index = i;
  					}
  				}
- 				update_nodes.push_back(root->childs[index]);
- 				insert(root->childs[index], root->childs[index]->state);
  			}
+			our_turn = !our_turn;
+ 			update_nodes.push_back(root->childs[index]);
+ 			insert(root->childs[index],root->childs[index]->state);
  		}
  	}
 
@@ -363,8 +359,6 @@ public:
  	}
 
 	bool our_turn;
-	int simulation_count;
-	float weight;
 	float total_count = 0.0;
 	std::vector<node*> update_nodes;
 
@@ -376,4 +370,8 @@ private:
 
 	float visit_count;
 	float win_count;
+	int simulation_count;
+	float weight;
+	std::string option;
+	int timer;
 };
