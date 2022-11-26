@@ -91,6 +91,7 @@ public:
 		}
 		for (size_t i = 0; i < space.size(); i++){
 			space[i] = action::place(i, who);
+
 			if(who == board::black){
 				opp_space[i] = action::place(i, board::white);
 			}
@@ -102,11 +103,20 @@ public:
 
 	virtual action take_action(const board& state) {
 		node* root = new_node(state);
- 		while(total_count < 200){
+		simulation_count = stoi(property("N"));
+		weight = stof(property("c"));
+
+ 		while(total_count < simulation_count){
+			our_turn = true;
  			update_nodes.push_back(root);
  			insert(root,state);
  		}
+
  		total_count = 0;
+
+		if(root->childs.size() == 0){
+			return action();
+		}
 
 		//find the best child 
  		int index = -1;
@@ -127,10 +137,13 @@ public:
 			board after = state;
 			if (move.apply(after) == board::legal){
 				if(after == root->childs[index]->state){
+					delete_node(root);
 					return move;
 				}
 			}
 		}
+
+		delete_node(root);
 		return action();
 	}
 
@@ -157,6 +170,15 @@ public:
  		bool win = true;
  		int count = 0 ;
 
+		if(our_turn == true) {
+ 			win = true;
+ 			count = 1;
+ 		}
+		else{
+			win = false;
+ 			count = 0;
+		}
+
  		while(!end){
  			bool exist_legal_move = false;
 
@@ -167,6 +189,7 @@ public:
  					if (move.apply(after) == board::legal){
  						exist_legal_move = true;
  						count++; 
+						win = true;
  						break;
  					}
  				}
@@ -179,6 +202,7 @@ public:
  					if (move.apply(after) == board::legal){
  						exist_legal_move = true;
  						count++; 
+						win = false;
  						break;
  					}
  				}
@@ -197,7 +221,8 @@ public:
 	void insert(struct node* root, board state){
  		// collect child
  		size_t number_of_legal_move = 0;
- 		if(update_nodes.size()%2 == 1){
+
+ 		if(our_turn == true){
  			for (const action::place& move : space) {
  				board after = state;
 
@@ -208,6 +233,7 @@ public:
  					}
  				}
  			}
+			our_turn = false;
  		}
  		else{
  			for (const action::place& move : opp_space) {
@@ -219,6 +245,7 @@ public:
  					}
  				}
  			}
+			our_turn = true;
  		}
 
  		// do simulation
@@ -250,6 +277,8 @@ public:
  			} 
 
  			if(do_expand){
+				std::shuffle(root->childs.begin(), root->childs.end(), engine);
+
  				for(size_t i = 0 ; i < root->childs.size(); i++){
  					if(root->childs[i]->uct_value > max && root->childs[i]->visit_count == 0){
  						max = root->childs[i]->uct_value;
@@ -283,13 +312,22 @@ public:
  		for (size_t i = 0 ; i < update_nodes.size() ; i++){
  			update_nodes[i]->visit_count++;
  			update_nodes[i]->win_count += value;	
- 			update_nodes[i]->uct_value = (update_nodes[i]->win_count / update_nodes[i]->visit_count) + 0.1 * (log(total_count) / update_nodes[i]->visit_count);		
+ 			update_nodes[i]->uct_value = (update_nodes[i]->win_count / update_nodes[i]->visit_count) + weight * (log(total_count) / update_nodes[i]->visit_count);		
  		}
 
  		// clear total_count and update_nodes
  		update_nodes.clear();
  	}
 
+	void delete_node(struct node * root){
+ 		for(size_t i = 0 ; i<root->childs.size(); i++)
+ 			delete_node(root->childs[i]);
+ 		delete(root);
+ 	}
+
+	bool our_turn;
+	int simulation_count;
+	float weight;
 	float total_count = 0.0;
 	std::vector<node*> update_nodes;
 
