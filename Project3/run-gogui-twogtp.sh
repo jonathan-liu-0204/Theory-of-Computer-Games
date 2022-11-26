@@ -1,11 +1,11 @@
 #!/bin/bash
 echo "GoGui-TwoGTP Launcher V20221101"
 # commands for player 1
-P1B='./nogo --shell --name="Hollow-Black" --black="mcts T=10000 N=10000 c=0.1"'
-P1W='./nogo --shell --name="Hollow-White" --white="mcts T=10000 N=10000 c=0.1"'
+P1B='./nogo --shell --name="Hollow-Black" --black="mcts T=10000 N=2000 c=0.1 timer=0 option=win_rate"'
+P1W='./nogo --shell --name="Hollow-White" --white="mcts T=10000 N=2000 c=0.1 timer=0 option=win_rate"'
 # commands for local player 2
-P2B='./nogo-judge --shell --name="Judge-Weak-Black" --black="weak"'
-P2W='./nogo-judge --shell --name="Judge-Weak-White" --white="weak"'
+P2B='./nogo-judge --shell --name="Judge-Weak-Black" --black="weak N=2000 c=0.1 unlock!"'
+P2W='./nogo-judge --shell --name="Judge-Weak-White" --white="weak N=2000 c=0.1 unlock!"'
 # commands for remote player 2
 #P2B="gogui-client tcglinux6 10000"
 #P2W="gogui-client tcglinux6 10000"
