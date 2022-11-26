@@ -109,6 +109,12 @@ public:
 		
 		std::clock_t start_time = std::clock(); // get current time
 
+		while(total_count<simulation_count){
+			our_turn = true;
+			update_nodes.push_back(root);
+			insert(root,state);
+		}
+
 		// while(1){
 		// 	our_turn = true;
 		// 	update_nodes.push_back(root);
@@ -117,12 +123,6 @@ public:
 		// 		break;
 		// 	}
 		// }
-
-		while(total_count<simulation_count){
-			our_turn = true;
-			update_nodes.push_back(root);
-			insert(root,state);
-		}
 
  		total_count = 0;
 
