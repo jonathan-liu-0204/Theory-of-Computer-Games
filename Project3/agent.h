@@ -110,16 +110,13 @@ public:
 		int timer = stoi(property("timer"));
 		std::string option = property("choose");
 
-		std::clock_t start_time = std::clock();
-
  		if(timer == 1){
- 			std::clock_t start = std::clock(); // get current time
+ 			std::clock_t start_time = std::clock(); // get current time
  			while(1){
  				our_turn = true;
  				update_nodes.push_back(root);
  				insert(root,state);
- 				if( (std::clock()-start)/ (double) CLOCKS_PER_SEC > 1) {
- 					// std::cout<<total_count<<std::endl;
+ 				if( (std::clock() - start_time)/ (double) CLOCKS_PER_SEC > 1) {
  					break;
  				}
  			}
