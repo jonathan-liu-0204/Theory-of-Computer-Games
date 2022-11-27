@@ -109,20 +109,20 @@ public:
 		
 		std::clock_t start_time = std::clock(); // get current time
 
-		//while(total_count<simulation_count){
-		// 	our_turn = true;
-		// 	update_nodes.push_back(root);
-		// 	insert(root,state);
-		// }
-
-		while(1){
+		while(total_count<simulation_count){
 			our_turn = true;
 			update_nodes.push_back(root);
 			insert(root,state);
-			if( (std::clock() - start_time)/ (double) CLOCKS_PER_SEC > 1) {
-				break;
-			}
 		}
+
+		// while(1){
+		// 	our_turn = true;
+		// 	update_nodes.push_back(root);
+		// 	insert(root,state);
+		// 	if( (std::clock() - start_time)/ (double) CLOCKS_PER_SEC > 1) {
+		// 		break;
+		// 	}
+		// }
 
  		total_count = 0;
 
@@ -130,16 +130,26 @@ public:
 			return action();
 		}
 
-		//find the best child 
+		// find the best child 
  		int index = -1;
  		float max =- 100;
 
+		// choose the greatest visit count
+		// for(size_t i = 0 ; i <root->childs.size(); i++){
+ 		// 	if(root->childs[i]->visit_count > max){
+ 		// 		max = root->childs[i]->visit_count;
+ 		// 		index = i;
+ 		// 	}
+ 		// }
+
+		// choose the best win rate
 		for(size_t i = 0 ; i <root->childs.size(); i++){
- 			if(root->childs[i]->visit_count > max){
- 				max = root->childs[i]->visit_count;
- 				index = i;
- 			}
- 		}
+				float cuurent_win_rate = root->childs[i]->win_count / root->childs[i]->visit_count ;
+				if(cuurent_win_rate>max){
+					max = cuurent_win_rate;
+					index = i;
+				}
+			}
 
 		for (const action::place& move : space) {
 			board after = state;
