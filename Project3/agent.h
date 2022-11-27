@@ -135,12 +135,12 @@ public:
  		float max =- 100;
 
 		// choose the greatest visit count
-		// for(size_t i = 0 ; i <root->childs.size(); i++){
- 		// 	if(root->childs[i]->visit_count > max){
- 		// 		max = root->childs[i]->visit_count;
- 		// 		index = i;
- 		// 	}
- 		// }
+		for(size_t i = 0 ; i <root->childs.size(); i++){
+ 			if(root->childs[i]->visit_count > max){
+ 				max = root->childs[i]->visit_count;
+ 				index = i;
+ 			}
+ 		}
 
 		// choose the best win rate
 		// for(size_t i = 0 ; i <root->childs.size(); i++){
@@ -152,12 +152,12 @@ public:
 		// }
 
 		// choose the one with the best uct_value
-		for(size_t i = 0 ; i <root->childs.size(); i++){
-			if(root->childs[i]->uct_value>max){
-				max = root->childs[i]->uct_value;
-				index = i;
-			}
-		}
+		// for(size_t i = 0 ; i <root->childs.size(); i++){
+		// 	if(root->childs[i]->uct_value>max){
+		// 		max = root->childs[i]->uct_value;
+		// 		index = i;
+		// 	}
+		// }
 
 		for (const action::place& move : space) {
 			board after = state;
