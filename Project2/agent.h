@@ -147,7 +147,7 @@ public:
 
 	std::vector<step> record;
 
-	// 1 x 8 Tuple
+	// 4 x 8 Tuple
 	//
 	// int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4) const{
 	// 	return after(vertice1) * 16 * 16 * 16 + after(vertice2) * 16 * 16 + after(vertice3) * 16 + after(vertice4);
@@ -185,7 +185,7 @@ public:
 	// 	net[7][get_feature(after, 3, 7, 11, 15)] += adjust;
 	// }
 
-	// 4 x 8 Tuple
+	// 6 x 8 Tuple
 	int get_feature(const board& after, int vertice1, int vertice2, int vertice3, int vertice4, int vertice5, int vertice6) const{
 		return after(vertice1) * 16 * 16 * 16 * 16 * 16 + after(vertice2) * 16 * 16 * 16 * 16 + after(vertice3) * 16 * 16 * 16 + after(vertice4) * 16 * 16 + after(vertice5) * 16 + after(vertice6);
 	}
