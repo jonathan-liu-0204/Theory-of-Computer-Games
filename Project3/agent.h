@@ -118,8 +118,8 @@ public:
 		while(1){
 			our_turn = true;
 			update_nodes.push_back(root);
-			insert(root,state);
-			if( (std::clock() - start_time)/ (double) CLOCKS_PER_SEC > 1) {
+			insert(root, state);
+			if((std::clock() - start_time)/ (double) CLOCKS_PER_SEC > 1) {
 				break;
 			}
 		}
@@ -135,7 +135,7 @@ public:
  		float max =- 100;
 
 		// choose the greatest visit count
-		for(size_t i = 0 ; i <root->childs.size(); i++){
+		for(size_t i = 0 ; i < root->childs.size(); i++){
  			if(root->childs[i]->visit_count > max){
  				max = root->childs[i]->visit_count;
  				index = i;
